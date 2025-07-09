@@ -1,0 +1,47 @@
+let count = 0;
+const shareBtn = document.getElementById("shareBtn");
+const counterText = document.getElementById("counter");
+const submitBtn = document.getElementById("submitBtn");
+const form = document.getElementById("registrationForm");
+const message = document.getElementById("message");
+
+shareBtn.addEventListener("click", () => {
+  if (count < 5) {
+    count++;
+    counterText.textContent = `Click count: ${count}/5`;
+
+    const msg = encodeURIComponent("Hey Buddy, Join Tech For Girls Community!");
+    window.open(`https://wa.me/?text=${msg}`, "_blank");
+  }
+
+  if (count === 5) {
+    counterText.textContent = "Sharing complete. Please continue.";
+    shareBtn.disabled = true;
+  }
+});
+
+form.addEventListener("submit", function (e) {
+  e.preventDefault();
+
+  if (count < 5) {
+    alert("Please complete sharing before submitting.");
+    return;
+  }
+
+  // Disable everything
+  form.querySelectorAll("input, button").forEach((el) => (el.disabled = true));
+
+  // Show message
+  message.innerHTML = "🎉 Your submission has been recorded. Thanks for being part of Tech for Girls!";
+
+  // Save flag to localStorage
+  localStorage.setItem("submitted", "true");
+});
+
+// Prevent resubmission
+window.onload = function () {
+  if (localStorage.getItem("submitted") === "true") {
+    form.querySelectorAll("input, button").forEach((el) => (el.disabled = true));
+    message.innerHTML = "🎉 Your submission has already been recorded.";
+  }
+};
